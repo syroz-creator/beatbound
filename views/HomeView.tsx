@@ -15,10 +15,6 @@ const SOCIAL_LINKS = {
 };
 
 const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
-  const openExternal = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  };
-
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-[#0a0510] overflow-hidden font-['Space_Grotesk']">
       {/* Background Grid Decoration */}
@@ -80,12 +76,14 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
           >
             Profile
           </button>
-          <button
-            onClick={() => openExternal(SOCIAL_LINKS.youtube)}
-            className="text-purple-400/30 font-bold uppercase text-[9px] tracking-[0.3em] mt-4 hover:text-purple-400 transition-colors"
+          <a
+            href={SOCIAL_LINKS.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-purple-400/30 font-bold uppercase text-[9px] tracking-[0.3em] mt-4 hover:text-purple-400 transition-colors text-center"
           >
             Credits & Build Info
-          </button>
+          </a>
         </div>
 
         {/* Visualizer bars */}
@@ -110,27 +108,33 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </div>
           </div>
           <div className="flex gap-4">
-            <button
-              onClick={() => openExternal(SOCIAL_LINKS.tiktok)}
+            <a
+              href={SOCIAL_LINKS.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex flex-col items-center gap-1 group"
             >
                <Gamepad2 size={16} className="text-purple-400 group-hover:text-white transition-colors" />
                <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">TikTok</span>
-            </button>
-            <button
-              onClick={() => openExternal(SOCIAL_LINKS.discord)}
+            </a>
+            <a
+              href={SOCIAL_LINKS.discord}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex flex-col items-center gap-1 group"
             >
                <Share2 size={16} className="text-purple-400 group-hover:text-white transition-colors" />
                <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">Discord</span>
-            </button>
-            <button
-              onClick={() => openExternal(SOCIAL_LINKS.instagram)}
+            </a>
+            <a
+              href={SOCIAL_LINKS.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex flex-col items-center gap-1 group"
             >
                <Info size={16} className="text-purple-400 group-hover:text-white transition-colors" />
                <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">Insta</span>
-            </button>
+            </a>
           </div>
           <div className="text-right flex flex-col">
             <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">Now Playing</span>
