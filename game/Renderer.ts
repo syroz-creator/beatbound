@@ -130,12 +130,18 @@ export class Renderer {
         ctx.lineWidth = 2;
         ctx.strokeRect(rx, ry, rw, rh);
       } else if (obj.type === 'spike') {
-        // Triangle with glow border
+        // Triangle with glow border. `rotation: 180` is used for ceiling spikes.
         ctx.fillStyle = '#000000';
         ctx.beginPath();
-        ctx.moveTo(rx, ry + rh);
-        ctx.lineTo(rx + rw / 2, ry);
-        ctx.lineTo(rx + rw, ry + rh);
+        if (obj.rotation === 180) {
+          ctx.moveTo(rx, ry);
+          ctx.lineTo(rx + rw / 2, ry + rh);
+          ctx.lineTo(rx + rw, ry);
+        } else {
+          ctx.moveTo(rx, ry + rh);
+          ctx.lineTo(rx + rw / 2, ry);
+          ctx.lineTo(rx + rw, ry + rh);
+        }
         ctx.closePath();
         ctx.fill();
         ctx.strokeStyle = '#ffffff';
@@ -154,12 +160,9 @@ export class Renderer {
         ctx.strokeStyle = '#ffffff';
         ctx.stroke();
       } else if (obj.type === 'portal') {
-        ctx.fillStyle = obj.portalType?.includes('fly') ? '#33ccff' : '#00ff00';
-        ctx.globalAlpha = 0.3;
-        ctx.fillRect(rx, ry, rw, rh);
-        ctx.globalAlpha = 1.0;
-        ctx.strokeStyle = '#ffffff';
-        ctx.strokeRect(rx, ry, rw, rh);
+        // Portal triggers are intentionally invisible so mode changes feel like
+        // entering a section/path instead of hitting large blocks.
+        continue;
       }
     }
 

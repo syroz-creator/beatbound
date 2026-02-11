@@ -4,7 +4,7 @@ import { GameEngine, GameState } from '../game/Engine';
 import { Renderer } from '../game/Renderer';
 import { audioManager } from '../game/AudioManager';
 import { LevelData, GameSettings } from '../types';
-import { RotateCcw, Pause, Play, Settings, LogOut, Skull, Trophy, MapPin, Trash2 } from 'lucide-react';
+import { Pause, Skull, Trophy } from 'lucide-react';
 
 interface GameViewProps {
   level: LevelData;
@@ -147,20 +147,6 @@ const GameView: React.FC<GameViewProps> = ({ level, settings, onExit, onRecordPr
         <button onClick={() => setIsPaused(true)} className="p-3 bg-purple-900/20 border border-purple-500/30 rounded-lg text-purple-400 hover:bg-purple-600/30 transition-all pointer-events-auto shadow-xl">
           <Pause size={20} fill="currentColor" />
         </button>
-      </div>
-
-      {/* Practice Tools Footer */}
-      <div className="absolute bottom-0 left-0 w-full p-8 flex justify-center gap-4 pointer-events-none z-10">
-        <div className="flex gap-2 pointer-events-auto">
-          <button className="flex items-center gap-3 px-6 py-3 bg-black/40 border border-white/10 rounded-xl text-white/60 hover:text-white hover:border-white/30 transition-all group">
-            <MapPin size={18} className="text-purple-500 group-hover:scale-110 transition-transform" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Set Checkpoint</span>
-          </button>
-          <button className="flex items-center gap-3 px-6 py-3 bg-black/40 border border-white/10 rounded-xl text-white/60 hover:text-pink-500 hover:border-pink-500/30 transition-all group">
-            <Trash2 size={18} className="text-pink-500 group-hover:scale-110 transition-transform" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Delete</span>
-          </button>
-        </div>
       </div>
 
       {/* Pause Menu */}

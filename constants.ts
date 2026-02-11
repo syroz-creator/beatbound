@@ -83,6 +83,9 @@ const buildLongTail = (
       objs.push({ id: `${pid}-flyIn`, type: 'portal', x: x + 4, y: 7, w: 1, h: 4, portalType: PortalType.MODE_FLY });
       objs.push({ id: `${pid}-flyFloor`, type: 'platform', x: x + 4, y: 13, w: flyLen, h: 1 });
       objs.push({ id: `${pid}-flyCeil`, type: 'platform', x: x + 4, y: 0, w: flyLen, h: 1 });
+      for (let sx = x + 8; sx < x + flyLen; sx += 4) {
+        objs.push({ id: `${pid}-ceilSpike-${sx}`, type: 'spike', x: sx, y: 1, w: 1, h: 1, rotation: 180 });
+      }
       objs.push({ id: `${pid}-flyP1`, type: 'platform', x: x + 12, y: 3, w: 2, h: 7 });
       objs.push({ id: `${pid}-flyP2`, type: 'platform', x: x + 20, y: 6, w: 2, h: 4 });
       if (difficulty >= 8) objs.push({ id: `${pid}-flyP3`, type: 'platform', x: x + 28, y: 4, w: 2, h: 6 });
@@ -148,6 +151,14 @@ export const TUTORIAL_LEVEL: LevelData = {
     { id: 'p1', type: 'portal', x: 130, y: 7, w: 1, h: 4, portalType: PortalType.MODE_FLY },
     { id: 'floor', type: 'platform', x: 130, y: 13, w: 100, h: 1 },
     { id: 'ceil', type: 'platform', x: 130, y: 0, w: 100, h: 1 },
+    { id: 'cs1', type: 'spike', x: 138, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'cs2', type: 'spike', x: 146, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'cs3', type: 'spike', x: 154, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'cs4', type: 'spike', x: 162, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'cs5', type: 'spike', x: 170, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'cs6', type: 'spike', x: 178, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'cs7', type: 'spike', x: 186, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'cs8', type: 'spike', x: 194, y: 1, w: 1, h: 1, rotation: 180 },
     { id: 'h1', type: 'platform', x: 150, y: 4, w: 2, h: 6 },
     { id: 'h2', type: 'platform', x: 170, y: 6, w: 2, h: 4 },
     { id: 'h3', type: 'platform', x: 190, y: 3, w: 2, h: 7 },
@@ -216,6 +227,12 @@ export const NORMAL_LEVEL: LevelData = {
     { id: 'n-p1', type: 'portal', x: 90, y: 7, w: 1, h: 4, portalType: PortalType.MODE_FLY },
     { id: 'n-floor', type: 'platform', x: 90, y: 13, w: 60, h: 1 },
     { id: 'n-ceil', type: 'platform', x: 90, y: 0, w: 60, h: 1 },
+    { id: 'n-cs1', type: 'spike', x: 98, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'n-cs2', type: 'spike', x: 106, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'n-cs3', type: 'spike', x: 114, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'n-cs4', type: 'spike', x: 122, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'n-cs5', type: 'spike', x: 130, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'n-cs6', type: 'spike', x: 138, y: 1, w: 1, h: 1, rotation: 180 },
     { id: 'n-h1', type: 'platform', x: 104, y: 4, w: 2, h: 6 },
     { id: 'n-h2', type: 'platform', x: 118, y: 7, w: 2, h: 4 },
     { id: 'n-h3', type: 'platform', x: 132, y: 3, w: 2, h: 7 },
@@ -252,6 +269,16 @@ export const HARD_LEVEL: LevelData = {
     { id: 'h-p1', type: 'portal', x: 70, y: 7, w: 1, h: 4, portalType: PortalType.MODE_FLY },
     { id: 'h-floor', type: 'platform', x: 70, y: 13, w: 80, h: 1 },
     { id: 'h-ceil', type: 'platform', x: 70, y: 0, w: 80, h: 1 },
+    { id: 'h-cs1', type: 'spike', x: 78, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs2', type: 'spike', x: 84, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs3', type: 'spike', x: 90, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs4', type: 'spike', x: 96, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs5', type: 'spike', x: 102, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs6', type: 'spike', x: 108, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs7', type: 'spike', x: 114, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs8', type: 'spike', x: 120, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs9', type: 'spike', x: 126, y: 1, w: 1, h: 1, rotation: 180 },
+    { id: 'h-cs10', type: 'spike', x: 132, y: 1, w: 1, h: 1, rotation: 180 },
     { id: 'h-h1', type: 'platform', x: 86, y: 2, w: 2, h: 9 },
     { id: 'h-h2', type: 'platform', x: 100, y: 6, w: 2, h: 5 },
     { id: 'h-h3', type: 'platform', x: 114, y: 3, w: 2, h: 8 },

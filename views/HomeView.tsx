@@ -7,7 +7,18 @@ interface HomeViewProps {
   onNavigate: (view: string) => void;
 }
 
+const SOCIAL_LINKS = {
+  discord: 'https://discord.gg/8w5AaNfr',
+  tiktok: 'https://www.tiktok.com/@syr0z_?is_from_webapp=1&sender_device=pc',
+  instagram: 'https://instagram.com/ahmad_uwaida',
+  youtube: 'https://youtube.com/@Syrozz1',
+};
+
 const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
+  const openExternal = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-[#0a0510] overflow-hidden font-['Space_Grotesk']">
       {/* Background Grid Decoration */}
@@ -69,7 +80,10 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
           >
             Profile
           </button>
-          <button className="text-purple-400/30 font-bold uppercase text-[9px] tracking-[0.3em] mt-4 hover:text-purple-400 transition-colors">
+          <button
+            onClick={() => openExternal(SOCIAL_LINKS.youtube)}
+            className="text-purple-400/30 font-bold uppercase text-[9px] tracking-[0.3em] mt-4 hover:text-purple-400 transition-colors"
+          >
             Credits & Build Info
           </button>
         </div>
@@ -96,17 +110,26 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </div>
           </div>
           <div className="flex gap-4">
-            <button className="flex flex-col items-center gap-1 group">
+            <button
+              onClick={() => openExternal(SOCIAL_LINKS.tiktok)}
+              className="flex flex-col items-center gap-1 group"
+            >
                <Gamepad2 size={16} className="text-purple-400 group-hover:text-white transition-colors" />
-               <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">Games</span>
+               <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">TikTok</span>
             </button>
-            <button className="flex flex-col items-center gap-1 group">
+            <button
+              onClick={() => openExternal(SOCIAL_LINKS.discord)}
+              className="flex flex-col items-center gap-1 group"
+            >
                <Share2 size={16} className="text-purple-400 group-hover:text-white transition-colors" />
-               <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">Social</span>
+               <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">Discord</span>
             </button>
-            <button className="flex flex-col items-center gap-1 group">
+            <button
+              onClick={() => openExternal(SOCIAL_LINKS.instagram)}
+              className="flex flex-col items-center gap-1 group"
+            >
                <Info size={16} className="text-purple-400 group-hover:text-white transition-colors" />
-               <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">Info</span>
+               <span className="text-[7px] text-purple-400/50 font-bold uppercase tracking-widest">Insta</span>
             </button>
           </div>
           <div className="text-right flex flex-col">

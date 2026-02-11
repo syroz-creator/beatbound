@@ -114,6 +114,12 @@ export class GameEngine {
       }
     }
 
+    // In fly mode, cap the top range at the roof so the ship cannot go above it.
+    if (s.mode === GameMode.FLY && s.playerY < 0) {
+      s.playerY = 0;
+      s.playerVelY = 0;
+    }
+
     // Input
     if (s.mode === GameMode.RUN && this.inputActive && s.isGrounded) {
       s.playerVelY = currentJumpVel;
