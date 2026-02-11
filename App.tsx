@@ -11,6 +11,9 @@ import ProfileView from './views/ProfileView';
 import { AlertCircle, Copy, Check } from 'lucide-react';
 
 const App: React.FC = () => {
+  const DESKTOP_STAGE_WIDTH = 1440;
+  const DESKTOP_STAGE_HEIGHT = 900;
+
   const [currentView, setCurrentView] = useState<'home' | 'play' | 'game' | 'editor' | 'settings' | 'profile'>('home');
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [progress, setProgress] = useState<ProgressState>({
@@ -21,9 +24,14 @@ const App: React.FC = () => {
   const [activeLevel, setActiveLevel] = useState<LevelData>(TUTORIAL_LEVEL);
   const [userLevels, setUserLevels] = useState<LevelData[]>([]);
   const [copied, setCopied] = useState(false);
+  const [viewport, setViewport] = useState({ w: window.innerWidth, h: window.innerHeight });
 
   const isConfigured = GOOGLE_CLIENT_ID && !GOOGLE_CLIENT_ID.includes("YOUR_GOOGLE_CLIENT_ID_HERE");
   const origin = window.location.origin;
+  const isLandscapePhone = viewport.w > viewport.h && viewport.w <= 1024;
+  const stageScale = isLandscapePhone
+    ? Math.min(viewport.w / DESKTOP_STAGE_WIDTH, viewport.h / DESKTOP_STAGE_HEIGHT)
+    : 1;
 
   // Log origin for easy access in F12
   useEffect(() => {
@@ -31,6 +39,16 @@ const App: React.FC = () => {
     console.log("%cYour Google Origin URL:", "color: #fff; font-weight: bold;", origin);
     console.log("%cPlace this in 'Authorized JavaScript origins' in Google Cloud Console.", "color: #aaa;");
   }, [origin]);
+
+  useEffect(() => {
+    const onResize = () => setViewport({ w: window.innerWidth, h: window.innerHeight });
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+    };
+  }, []);
 
   // Load from LocalStorage
   useEffect(() => {
@@ -78,74 +96,84 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-screen text-slate-100 overflow-hidden bg-slate-950 font-['Space_Grotesk'] flex flex-col">
-      {/* Global Config Banner (Visible only when Client ID is missing) */}
-      {!isConfigured && currentView !== 'game' && (
-        <div className="w-full bg-purple-600/20 border-b border-purple-500/30 p-3 flex items-center justify-between px-6 animate-in slide-in-from-top duration-500 z-[100] backdrop-blur-md">
-           <div className="flex items-center gap-3">
+    <div className="w-full h-screen overflow-hidden bg-slate-950 flex items-center justify-center">
+      <div
+        className="text-slate-100 overflow-hidden bg-slate-950 font-['Space_Grotesk'] flex flex-col origin-top-left"
+        style={{
+          width: isLandscapePhone ? `${DESKTOP_STAGE_WIDTH}px` : '100%',
+          height: isLandscapePhone ? `${DESKTOP_STAGE_HEIGHT}px` : '100%',
+          transform: isLandscapePhone ? `scale(${stageScale})` : 'none',
+        }}
+      >
+        {/* Global Config Banner (Visible only when Client ID is missing) */}
+        {!isConfigured && currentView !== 'game' && (
+          <div className="w-full bg-purple-600/20 border-b border-purple-500/30 p-3 flex items-center justify-between px-6 animate-in slide-in-from-top duration-500 z-[100] backdrop-blur-md">
+            <div className="flex items-center gap-3">
               <AlertCircle size={16} className="text-purple-400" />
               <p className="text-[10px] font-black uppercase tracking-widest text-purple-200">
                 Setup Required: <span className="opacity-60 lowercase font-mono ml-2">{origin}</span>
               </p>
-           </div>
-           <button 
-             onClick={copyOrigin}
-             className="flex items-center gap-2 bg-purple-600 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-purple-500 transition-all active:scale-95 shadow-lg shadow-purple-600/20"
-           >
-             {copied ? <><Check size={12} /> Copied</> : <><Copy size={12} /> Copy Origin URL</>}
-           </button>
-        </div>
-      )}
+            </div>
+            <button
+              onClick={copyOrigin}
+              className="flex items-center gap-2 bg-purple-600 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-purple-500 transition-all active:scale-95 shadow-lg shadow-purple-600/20"
+            >
+              {copied ? <><Check size={12} /> Copied</> : <><Copy size={12} /> Copy Origin URL</>}
+            </button>
+          </div>
+        )}
 
-      <div className="flex-1 relative overflow-hidden">
-        {currentView === 'home' && (
-          <HomeView 
-            onNavigate={(v) => setCurrentView(v as any)} 
-          />
-        )}
-        {currentView === 'play' && (
-          <LevelSelectView 
-            levels={[...BUILTIN_LEVELS, ...userLevels]} 
-            onStart={handleStartGame} 
-            onBack={() => setCurrentView('home')} 
-            onNavigateProfile={() => setCurrentView('profile')}
-          />
-        )}
-        {currentView === 'game' && (
-          <GameView 
-            level={activeLevel} 
-            settings={settings} 
-            onExit={() => setCurrentView('play')}
-            onRecordProgress={(perc) => {
+        <div className="flex-1 relative overflow-hidden">
+          {currentView === 'home' && (
+            <HomeView
+              onNavigate={(v) => setCurrentView(v as any)}
+            />
+          )}
+          {currentView === 'play' && (
+            <LevelSelectView
+              levels={[...BUILTIN_LEVELS, ...userLevels]}
+              onStart={handleStartGame}
+              onBack={() => setCurrentView('home')}
+              onNavigateProfile={() => setCurrentView('profile')}
+            />
+          )}
+          {currentView === 'game' && (
+            <GameView
+              level={activeLevel}
+              settings={settings}
+              onExit={() => setCurrentView('play')}
+              onRecordProgress={(perc) => {
                 const currentBest = progress.completedLevels[activeLevel.metadata.id] || 0;
                 if (perc > currentBest) {
-                    setProgress(prev => ({
-                        ...prev,
-                        completedLevels: { ...prev.completedLevels, [activeLevel.metadata.id]: perc }
-                    }));
+                  setProgress(prev => ({
+                    ...prev,
+                    completedLevels: { ...prev.completedLevels, [activeLevel.metadata.id]: perc }
+                  }));
                 }
-            }}
-          />
-        )}
-        {currentView === 'editor' && (
-          <EditorView 
-            onSave={handleLevelSave} 
-            onBack={() => setCurrentView('home')} 
-          />
-        )}
-        {currentView === 'settings' && (
-          <SettingsView 
-            settings={settings} 
-            onUpdate={setSettings} 
-            onBack={() => setCurrentView('home')} 
-          />
-        )}
-        {currentView === 'profile' && (
-          <ProfileView
-            progress={progress}
-            onBack={() => setCurrentView('home')}
-          />
-        )}
+              }}
+            />
+          )}
+          {currentView === 'editor' && (
+            <EditorView
+              onSave={handleLevelSave}
+              onBack={() => setCurrentView('home')}
+            />
+          )}
+          {currentView === 'settings' && (
+            <SettingsView
+              settings={settings}
+              onUpdate={setSettings}
+              onBack={() => setCurrentView('home')}
+              forceDesktopLayout={isLandscapePhone}
+            />
+          )}
+          {currentView === 'profile' && (
+            <ProfileView
+              progress={progress}
+              onBack={() => setCurrentView('home')}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

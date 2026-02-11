@@ -8,9 +8,10 @@ interface SettingsViewProps {
   settings: GameSettings;
   onUpdate: (s: GameSettings) => void;
   onBack: () => void;
+  forceDesktopLayout?: boolean;
 }
 
-const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate, onBack }) => {
+const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate, onBack, forceDesktopLayout = false }) => {
   const categories = [
     { id: 'audio', label: 'Audio', icon: <Volume2 size={20} /> },
     { id: 'graphics', label: 'Graphics', icon: <Monitor size={20} /> },
@@ -32,7 +33,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate, onBack 
         <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter glow-purple">Settings</h2>
       </div>
 
-      <div className="max-w-4xl mx-auto w-full grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className={`max-w-4xl mx-auto w-full grid gap-8 ${forceDesktopLayout ? 'grid-cols-4' : 'grid-cols-1 md:grid-cols-4'}`}>
         <div className="flex flex-col gap-2">
           {categories.map(cat => (
             <button
@@ -46,7 +47,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate, onBack 
           ))}
         </div>
 
-        <div className="md:col-span-3 bg-purple-900/10 rounded-3xl border border-purple-500/20 p-8 flex flex-col gap-8">
+        <div className={`${forceDesktopLayout ? 'col-span-3' : 'md:col-span-3'} bg-purple-900/10 rounded-3xl border border-purple-500/20 p-8 flex flex-col gap-8`}>
           {activeTab === 'audio' && (
             <div className="space-y-8">
               <div className="space-y-4">

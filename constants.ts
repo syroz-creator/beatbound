@@ -46,20 +46,66 @@ export const DEFAULT_SETTINGS: GameSettings = {
   parallaxEnabled: true,
 };
 
-const buildLongTail = (prefix: string, startX: number, segments: number): LevelData['objects'] => {
+const buildLongTail = (
+  prefix: string,
+  startX: number,
+  segments: number,
+  difficulty: number
+): LevelData['objects'] => {
   const objs: LevelData['objects'] = [];
   let x = startX;
+
   for (let i = 0; i < segments; i++) {
-    const width = 26 + (i % 3) * 6;
-    objs.push({ id: `${prefix}-f${i}`, type: 'platform', x, y: 10, w: width, h: 2 });
-    if (i % 4 === 1) {
-      objs.push({ id: `${prefix}-s${i}`, type: 'spike', x: x + Math.max(6, Math.floor(width / 3)), y: 9, w: 1, h: 1 });
+    const pattern = i % 6;
+    const width = 24 + ((i + difficulty) % 3) * 6;
+    const pid = `${prefix}-${i}`;
+
+    objs.push({ id: `${pid}-floor`, type: 'platform', x, y: 10, w: width, h: 2 });
+
+    if (pattern === 0) {
+      objs.push({ id: `${pid}-s1`, type: 'spike', x: x + 7, y: 9, w: 1, h: 1 });
+      objs.push({ id: `${pid}-s2`, type: 'spike', x: x + 8, y: 9, w: 1, h: 1 });
+      if (difficulty >= 5) objs.push({ id: `${pid}-s3`, type: 'spike', x: x + 14, y: 9, w: 1, h: 1 });
+      objs.push({ id: `${pid}-b1`, type: 'platform', x: x + width - 7, y: 7, w: 5, h: 1 });
+    } else if (pattern === 1) {
+      objs.push({ id: `${pid}-step1`, type: 'platform', x: x + 6, y: 8, w: 4, h: 1 });
+      objs.push({ id: `${pid}-step2`, type: 'platform', x: x + 13, y: 6, w: 4, h: 1 });
+      objs.push({ id: `${pid}-orb`, type: 'orb', x: x + 11, y: 7, w: 1, h: 1 });
+      if (difficulty >= 8) objs.push({ id: `${pid}-s1`, type: 'spike', x: x + 18, y: 9, w: 1, h: 1 });
+    } else if (pattern === 2) {
+      objs.push({ id: `${pid}-archL`, type: 'platform', x: x + 8, y: 5, w: 2, h: 5 });
+      objs.push({ id: `${pid}-archR`, type: 'platform', x: x + 15, y: 5, w: 2, h: 5 });
+      objs.push({ id: `${pid}-s1`, type: 'spike', x: x + 11, y: 9, w: 1, h: 1 });
+      objs.push({ id: `${pid}-s2`, type: 'spike', x: x + 12, y: 9, w: 1, h: 1 });
+      if (difficulty >= 5) objs.push({ id: `${pid}-top`, type: 'platform', x: x + 10, y: 4, w: 5, h: 1 });
+    } else if (pattern === 3 && difficulty >= 4) {
+      const flyLen = 30 + (difficulty >= 8 ? 8 : 0);
+      objs.push({ id: `${pid}-flyIn`, type: 'portal', x: x + 4, y: 7, w: 1, h: 4, portalType: PortalType.MODE_FLY });
+      objs.push({ id: `${pid}-flyFloor`, type: 'platform', x: x + 4, y: 13, w: flyLen, h: 1 });
+      objs.push({ id: `${pid}-flyCeil`, type: 'platform', x: x + 4, y: 0, w: flyLen, h: 1 });
+      objs.push({ id: `${pid}-flyP1`, type: 'platform', x: x + 12, y: 3, w: 2, h: 7 });
+      objs.push({ id: `${pid}-flyP2`, type: 'platform', x: x + 20, y: 6, w: 2, h: 4 });
+      if (difficulty >= 8) objs.push({ id: `${pid}-flyP3`, type: 'platform', x: x + 28, y: 4, w: 2, h: 6 });
+      objs.push({ id: `${pid}-flyOut`, type: 'portal', x: x + flyLen + 2, y: 7, w: 1, h: 4, portalType: PortalType.MODE_RUN });
+      objs.push({ id: `${pid}-land`, type: 'platform', x: x + flyLen + 2, y: 10, w: 12, h: 2 });
+      x += flyLen + 10;
+      continue;
+    } else if (pattern === 4) {
+      objs.push({ id: `${pid}-s1`, type: 'spike', x: x + 6, y: 9, w: 1, h: 1 });
+      objs.push({ id: `${pid}-s2`, type: 'spike', x: x + 10, y: 9, w: 1, h: 1 });
+      objs.push({ id: `${pid}-s3`, type: 'spike', x: x + 14, y: 9, w: 1, h: 1 });
+      if (difficulty >= 5) objs.push({ id: `${pid}-s4`, type: 'spike', x: x + 15, y: 9, w: 1, h: 1 });
+      objs.push({ id: `${pid}-lift`, type: 'platform', x: x + width - 8, y: 7, w: 6, h: 1 });
+    } else {
+      objs.push({ id: `${pid}-orb1`, type: 'orb', x: x + 8, y: 7, w: 1, h: 1 });
+      objs.push({ id: `${pid}-orb2`, type: 'orb', x: x + 15, y: difficulty >= 8 ? 6 : 7, w: 1, h: 1 });
+      objs.push({ id: `${pid}-b1`, type: 'platform', x: x + 18, y: 6, w: 5, h: 1 });
+      objs.push({ id: `${pid}-s1`, type: 'spike', x: x + width - 5, y: 9, w: 1, h: 1 });
     }
-    if (i % 6 === 3) {
-      objs.push({ id: `${prefix}-b${i}`, type: 'platform', x: x + width - 6, y: 7, w: 5, h: 1 });
-    }
+
     x += width + 6;
   }
+
   return objs;
 };
 
@@ -115,7 +161,7 @@ export const TUTORIAL_LEVEL: LevelData = {
     { id: 's8', type: 'spike', x: 231, y: 9, w: 1, h: 1 },
     { id: 's9', type: 'spike', x: 232, y: 9, w: 1, h: 1 },
     { id: 'f5', type: 'platform', x: 260, y: 10, w: 10, h: 2 },
-    ...buildLongTail('t', 280, 18),
+    ...buildLongTail('t', 280, 18, 1),
   ]
 };
 
@@ -144,7 +190,7 @@ export const EASY_LEVEL: LevelData = {
     { id: 'e-f4', type: 'platform', x: 150, y: 10, w: 40, h: 2 },
     { id: 'e-s5', type: 'spike', x: 165, y: 9, w: 1, h: 1 },
     { id: 'e-f5', type: 'platform', x: 180, y: 10, w: 30, h: 2 },
-    ...buildLongTail('e', 220, 20),
+    ...buildLongTail('e', 220, 20, 2),
   ]
 };
 
@@ -178,7 +224,7 @@ export const NORMAL_LEVEL: LevelData = {
     { id: 'n-s4', type: 'spike', x: 165, y: 9, w: 1, h: 1 },
     { id: 'n-s5', type: 'spike', x: 172, y: 9, w: 1, h: 1 },
     { id: 'n-f4', type: 'platform', x: 185, y: 10, w: 35, h: 2 },
-    ...buildLongTail('n', 230, 20),
+    ...buildLongTail('n', 230, 20, 5),
   ]
 };
 
@@ -216,7 +262,7 @@ export const HARD_LEVEL: LevelData = {
     { id: 'h-s7', type: 'spike', x: 170, y: 9, w: 1, h: 1 },
     { id: 'h-s8', type: 'spike', x: 178, y: 9, w: 1, h: 1 },
     { id: 'h-f4', type: 'platform', x: 190, y: 10, w: 30, h: 2 },
-    ...buildLongTail('h', 230, 22),
+    ...buildLongTail('h', 230, 22, 8),
   ]
 };
 
