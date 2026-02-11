@@ -1,0 +1,7 @@
+{
+  "name": "BeatBound",
+  "description": "A rhythm-based 2D platformer with high-precision physics, original geometric branding, and a built-in level editor.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
