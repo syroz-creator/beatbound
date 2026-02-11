@@ -1,20 +1,31 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+  <h1>Beatbound</h1>
+  <p>Rhythm‑runner platformer with custom levels, difficulty tiers, and neon‑grid vibes.</p>
 </div>
 
-# Run and deploy your AI Studio app
+## Overview
+Beatbound is a fast, one‑button rhythm platformer inspired by classic geometry runners.  
+Pick a difficulty, survive the obstacles, and sync your jumps to the beat.
 
-This contains everything you need to run your app locally.
+## Features
+- Easy, Normal, and Hard maps with distinct visuals
+- Level select with difficulty tabs
+- In‑game settings for audio, graphics, and controls
+- Built‑in background music and SFX
+- Local progress tracking
 
-View your app in AI Studio: https://ai.studio/apps/drive/1KEQ-C_aICdlBSin18oVcPsek_VrMKdF-
+## Controls
+- Jump/Fly: `Space` or `ArrowUp`
+- Pause: `Esc`
+- Restart (after death): `R`
 
 ## Run Locally
+1. Install dependencies: `npm install`
+2. Start the dev server: `npm run dev`
 
-**Prerequisites:**  Node.js
+## Project Notes
+- The current background track is configured in `constants.ts`
+- You can add new songs by placing audio files in `public/audio/`
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Credits
+- Created by AhmadUwaida
